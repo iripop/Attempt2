@@ -1,0 +1,67 @@
+﻿@model LogInLogOut.Models.AdminUser
+@{
+    ViewBag.Title = "Index";
+}
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<h2>Index</h2>
+<style>
+    .field-validation-error{
+        color:red;
+}
+</style>
+
+<body>
+    <div id="log-in div">
+        @using (Html.BeginForm("Authorize","LogIn", FormMethod.Post))
+        {
+            <table>
+                <tr>
+                    <td></td>
+                    <td>App Name</td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.admin_username)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model=>model.admin_username)
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.ValidationMessageFor(model=>model.admin_username)</td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.admin_password)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.admin_password)
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>@Html.ValidationMessageFor(model => model.admin_password)</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label class="field-validation-error">@Html.DisplayFor(model=> model.LoginErrorMessage)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" name="name" value="Login" />
+                        <input type="reset" name="name" value="Clear" />
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+</body>
+
+
