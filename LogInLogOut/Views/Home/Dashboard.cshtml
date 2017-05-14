@@ -3,16 +3,23 @@
     ViewBag.Title = "Dashboard";
     if (Session["admin_id"] == null)
     {
-        Response.Redirect("~/LogIn/Index");
+        Response.Redirect("~/LogInAdmin/Login");
     }
 }
 
 <h2>Dashboard</h2>
-<body>
-<div>
-    <h1>Dashboard</h1>
-    <h3>Username: @Session["admin_username"].ToString()</h3>
-    <a href="@Url.Action("Logout", "LogIn")">Logout</a>
-</div>
-</body>
+
+    <h3>Username: @Session["AdminEmail"].ToString()</h3>
+    <a href="@Url.Action("Logout", "LogInAdmin")">Logout</a>
+
+Welcome @HttpContext.Current.User.Identity.Name
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("Logout", "RegisterUser", FormMethod.Post, new { id = "logoutForm" }))
+    {
+        <a href="javascript:document.getElementById('logoutForm').submit()">Logout</a>
+    }
+}
+
 

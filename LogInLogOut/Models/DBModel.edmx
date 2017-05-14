@@ -10,9 +10,11 @@
             <PropertyRef Name="admin_id" />
           </Key>
           <Property Name="admin_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="admin_username" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="admin_password" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="admin_email" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="AdminEmail" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AdminPassword" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AdminPhoneNr" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Donations">
           <Key>
@@ -144,9 +146,11 @@
             <PropertyRef Name="admin_id" />
           </Key>
           <Property Name="admin_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="admin_username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="admin_password" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="admin_email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AdminEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AdminPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AdminPhoneNr" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="Donation">
           <Key>
@@ -282,9 +286,11 @@
             <EntityTypeMapping TypeName="BloodDonorDBModel.AdminUser">
               <MappingFragment StoreEntitySet="AdminUsers">
                 <ScalarProperty Name="admin_id" ColumnName="admin_id" />
-                <ScalarProperty Name="admin_username" ColumnName="admin_username" />
-                <ScalarProperty Name="admin_password" ColumnName="admin_password" />
-                <ScalarProperty Name="admin_email" ColumnName="admin_email" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="AdminEmail" ColumnName="AdminEmail" />
+                <ScalarProperty Name="AdminPassword" ColumnName="AdminPassword" />
+                <ScalarProperty Name="AdminPhoneNr" ColumnName="AdminPhoneNr" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

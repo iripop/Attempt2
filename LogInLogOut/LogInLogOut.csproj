@@ -162,8 +162,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Web.config" />
-    <Content Include="Views\LogIn\Index.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AdminLogin.cs" />
     <Compile Include="Models\AdminUser.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -198,7 +200,6 @@
     <Compile Include="Models\Donor.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Extended\AdminUser.cs" />
     <Compile Include="Models\Extended\Staff.cs" />
     <Compile Include="Models\ManageBloodDrive.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
@@ -209,6 +210,7 @@
     <Compile Include="Models\Staff.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StaffLogin.cs" />
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -228,6 +230,9 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\RegisterUser\AddOrEdit.cshtml" />
+    <Content Include="Views\RegisterUser\VerifyAccount.cshtml" />
+    <Content Include="Views\RegisterUser\Login.cshtml" />
+    <Content Include="Views\LogInAdmin\Login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

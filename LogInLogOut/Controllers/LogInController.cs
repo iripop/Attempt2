@@ -4,23 +4,28 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using LogInLogOut.Models;
+using System.Web.Security;
 
 namespace LogInLogOut.Controllers
 {
-    public class LogInController : Controller
+    public class LogInAdminController : Controller
     {
-        // GET: LogIn
-        public ActionResult Index()
+     
+        //LogIn
+        [HttpGet]
+        public ActionResult Login()
         {
             return View();
         }
 
+        //LogIn POST
         [HttpPost]
-        public ActionResult Authorize(LogInLogOut.Models.AdminUser userModel)
+        [ValidateAntiForgeryToken]
+        public ActionResult Authorize(LogInLogOut.Models.AdminLogin userModel)
         {
             using (BloodDonorDBEntities db = new BloodDonorDBEntities())
             {
-                var userDetails = db.AdminUsers.Where(x => x.admin_username == userModel.admin_username && x.admin_password == userModel.admin_password).FirstOrDefault();
+                var userDetails = db.AdminUsers.Where(x => x.AdminEmail == userModel.AdminEmail && x.AdminPassword == userModel.AdminPassword).FirstOrDefault();
                 if (userDetails==null)
                 {
                     userModel.LoginErrorMessage = "Wrong username or paswword";
@@ -29,17 +34,20 @@ namespace LogInLogOut.Controllers
                 else
                 {
                     Session["admin_id"] = userDetails.admin_id;
-                    Session["admin_username"] = userDetails.admin_username;
+                    Session["AdminEmail"] = userDetails.AdminEmail;
                     return RedirectToAction("Dashboard", "Home");
                 }
             }
         }
-         
+
+        [Authorize]
+        [HttpPost]
         public ActionResult Logout()
         {
             int adminID = (int)Session["admin_id"];
             Session.Abandon();
-            return RedirectToAction("Index", "LogIn");
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Authorize", "LogIn");
         }
     }
 }

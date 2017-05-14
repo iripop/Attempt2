@@ -15,9 +15,10 @@ namespace LogInLogOut.Models
     public partial class AdminUser
     {
         public int admin_id { get; set; }
-        public string admin_username { get; set; }
-        public string admin_password { get; set; }
-        public string admin_email { get; set; }
-        public string LoginErrorMessage { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string AdminEmail { get; set; }
+        public string AdminPassword { get; set; }
+        public string AdminPhoneNr { get; set; }
     }
 }
