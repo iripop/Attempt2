@@ -14,12 +14,6 @@ namespace LogInLogOut.Models
     
     public partial class Donor
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Donor()
-        {
-            this.Donations = new HashSet<Donation>();
-        }
-    
         public int DonorID { get; set; }
         public bool ActiveDonor { get; set; }
         public string DonorName { get; set; }
@@ -31,7 +25,6 @@ namespace LogInLogOut.Models
         public System.DateTime LastScreeningDate { get; set; }
         public string DonorIdentifier { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Donation> Donations { get; set; }
+        public virtual Donation Donation { get; set; }
     }
 }

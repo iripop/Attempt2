@@ -11,22 +11,13 @@ namespace LogInLogOut.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
     
     public partial class AdminUser
     {
         public int admin_id { get; set; }
-        [DisplayName("Username")]
-        [Required(ErrorMessage ="Username required")]
         public string admin_username { get; set; }
-
-        [DisplayName("Password")]
-        [Required(ErrorMessage = "Password required")]
-        [DataType(DataType.Password)]
         public string admin_password { get; set; }
         public string admin_email { get; set; }
-
         public string LoginErrorMessage { get; set; }
     }
 }

@@ -15,9 +15,13 @@ namespace LogInLogOut.Models
     public partial class Staff
     {
         public int staff_id { get; set; }
-        public string staff_username { get; set; }
-        public string staff_password { get; set; }
-        public string staff_email { get; set; }
-        public string staff_phoneNr { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string StaffEmail { get; set; }
+        public string StaffPassword { get; set; }
+        public string StaffPhoneNr { get; set; }
+        public bool IsAdmin { get; set; }
+        public bool IsEmailVerified { get; set; }
+        public System.Guid ActivationCode { get; set; }
     }
 }

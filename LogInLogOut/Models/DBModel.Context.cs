@@ -25,12 +25,12 @@ namespace LogInLogOut.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Donor> Donors { get; set; }
-        public virtual DbSet<Recipient> Recipients { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<AdminUser> AdminUsers { get; set; }
         public virtual DbSet<Donation> Donations { get; set; }
+        public virtual DbSet<Donor> Donors { get; set; }
         public virtual DbSet<ManageBloodDrive> ManageBloodDrives { get; set; }
+        public virtual DbSet<Recipient> Recipients { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
     }
 }

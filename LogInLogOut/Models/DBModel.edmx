@@ -5,31 +5,18 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="BloodDonorDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'BloodDonorDB.dbo.AdminUsers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="AdminUsers">
           <Key>
             <PropertyRef Name="admin_id" />
-            <PropertyRef Name="admin_username" />
-            <PropertyRef Name="admin_password" />
           </Key>
           <Property Name="admin_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="admin_username" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="admin_password" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="admin_email" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'BloodDonorDB.dbo.Donations' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Donations">
           <Key>
             <PropertyRef Name="DonationID" />
-            <PropertyRef Name="DonationType" />
-            <PropertyRef Name="CrossBloodType" />
-            <PropertyRef Name="CrossRhFactor" />
-            <PropertyRef Name="ExpirationDate" />
-            <PropertyRef Name="NumberofUnits" />
-            <PropertyRef Name="DonationSite" />
-            <PropertyRef Name="DonationIdentifier" />
           </Key>
           <Property Name="DonationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DonationType" Type="varchar" MaxLength="50" Nullable="false" />
@@ -55,18 +42,9 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Donations' does not have a primar
           <Property Name="LastScreeningDate" Type="datetime" Nullable="false" />
           <Property Name="DonorIdentifier" Type="nchar" MaxLength="10" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'BloodDonorDB.dbo.ManageBloodDrives' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ManageBloodDrives">
           <Key>
             <PropertyRef Name="bloodDrive_id" />
-            <PropertyRef Name="drive_name" />
-            <PropertyRef Name="event_date" />
-            <PropertyRef Name="startTime" />
-            <PropertyRef Name="endTime" />
-            <PropertyRef Name="venue_name" />
-            <PropertyRef Name="address" />
-            <PropertyRef Name="city" />
           </Key>
           <Property Name="bloodDrive_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="drive_name" Type="nvarchar" MaxLength="200" Nullable="false" />
@@ -91,19 +69,19 @@ warning 6002: The table/view 'BloodDonorDB.dbo.ManageBloodDrives' does not have 
           <Property Name="RecipientIdentifier" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="RecipientCodedName" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Staff">
           <Key>
             <PropertyRef Name="staff_id" />
-            <PropertyRef Name="staff_username" />
-            <PropertyRef Name="staff_password" />
           </Key>
           <Property Name="staff_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="staff_username" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="staff_password" Type="nvarchar" MaxLength="150" Nullable="false" />
-          <Property Name="staff_email" Type="nvarchar" MaxLength="50" />
-          <Property Name="staff_phoneNr" Type="nvarchar" MaxLength="15" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StaffEmail" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="StaffPassword" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="StaffPhoneNr" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsAdmin" Type="bit" Nullable="false" />
+          <Property Name="IsEmailVerified" Type="bit" Nullable="false" />
+          <Property Name="ActivationCode" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -117,7 +95,7 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
         </EntityType>
         <Association Name="FK_Donations_Donors">
           <End Role="Donors" Type="Self.Donors" Multiplicity="1" />
-          <End Role="Donations" Type="Self.Donations" Multiplicity="*" />
+          <End Role="Donations" Type="Self.Donations" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Donors">
               <PropertyRef Name="DonorID" />
@@ -129,7 +107,7 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
         </Association>
         <Association Name="FK_Donations_Recipients">
           <End Role="Recipients" Type="Self.Recipients" Multiplicity="1" />
-          <End Role="Donations" Type="Self.Donations" Multiplicity="*" />
+          <End Role="Donations" Type="Self.Donations" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Recipients">
               <PropertyRef Name="RecipientID" />
@@ -140,53 +118,13 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="BloodDonorDBModelStoreContainer">
+          <EntitySet Name="AdminUsers" EntityType="Self.AdminUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Donations" EntityType="Self.Donations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Donors" EntityType="Self.Donors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ManageBloodDrives" EntityType="Self.ManageBloodDrives" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Recipients" EntityType="Self.Recipients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AdminUsers" EntityType="Self.AdminUsers" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [AdminUsers].[admin_id] AS [admin_id], 
-    [AdminUsers].[admin_username] AS [admin_username], 
-    [AdminUsers].[admin_password] AS [admin_password], 
-    [AdminUsers].[admin_email] AS [admin_email]
-    FROM [dbo].[AdminUsers] AS [AdminUsers]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Donations" EntityType="Self.Donations" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Donations].[DonationID] AS [DonationID], 
-    [Donations].[DonationType] AS [DonationType], 
-    [Donations].[CrossBloodType] AS [CrossBloodType], 
-    [Donations].[CrossRhFactor] AS [CrossRhFactor], 
-    [Donations].[ExpirationDate] AS [ExpirationDate], 
-    [Donations].[NumberofUnits] AS [NumberofUnits], 
-    [Donations].[DonationSite] AS [DonationSite], 
-    [Donations].[DonationIdentifier] AS [DonationIdentifier]
-    FROM [dbo].[Donations] AS [Donations]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="ManageBloodDrives" EntityType="Self.ManageBloodDrives" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [ManageBloodDrives].[bloodDrive_id] AS [bloodDrive_id], 
-    [ManageBloodDrives].[drive_name] AS [drive_name], 
-    [ManageBloodDrives].[event_date] AS [event_date], 
-    [ManageBloodDrives].[startTime] AS [startTime], 
-    [ManageBloodDrives].[endTime] AS [endTime], 
-    [ManageBloodDrives].[registrationEmail] AS [registrationEmail], 
-    [ManageBloodDrives].[registrationPhone] AS [registrationPhone], 
-    [ManageBloodDrives].[venue_name] AS [venue_name], 
-    [ManageBloodDrives].[address] AS [address], 
-    [ManageBloodDrives].[city] AS [city], 
-    [ManageBloodDrives].[zip] AS [zip]
-    FROM [dbo].[ManageBloodDrives] AS [ManageBloodDrives]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Staff" EntityType="Self.Staff" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Staff].[staff_id] AS [staff_id], 
-    [Staff].[staff_username] AS [staff_username], 
-    [Staff].[staff_password] AS [staff_password], 
-    [Staff].[staff_email] AS [staff_email], 
-    [Staff].[staff_phoneNr] AS [staff_phoneNr]
-    FROM [dbo].[Staff] AS [Staff]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_Donations_Donors" Association="Self.FK_Donations_Donors">
             <End Role="Donors" EntitySet="Donors" />
             <End Role="Donations" EntitySet="Donations" />
@@ -201,6 +139,30 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BloodDonorDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AdminUser">
+          <Key>
+            <PropertyRef Name="admin_id" />
+          </Key>
+          <Property Name="admin_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="admin_username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="admin_password" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="admin_email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Donation">
+          <Key>
+            <PropertyRef Name="DonationID" />
+          </Key>
+          <Property Name="DonationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DonationType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CrossBloodType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CrossRhFactor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ExpirationDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NumberofUnits" Type="Double" Nullable="false" />
+          <Property Name="DonationSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DonationIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Donor" Relationship="Self.FK_Donations_Donors" FromRole="Donations" ToRole="Donors" />
+          <NavigationProperty Name="Recipient" Relationship="Self.FK_Donations_Recipients" FromRole="Donations" ToRole="Recipients" />
+        </EntityType>
         <EntityType Name="Donor">
           <Key>
             <PropertyRef Name="DonorID" />
@@ -215,73 +177,11 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
           <Property Name="DonorEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LastScreeningDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DonorIdentifier" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Donations" Relationship="Self.FK_Donations_Donors" FromRole="Donors" ToRole="Donations" />
-        </EntityType>
-        <EntityType Name="Recipient">
-          <Key>
-            <PropertyRef Name="RecipientID" />
-          </Key>
-          <Property Name="RecipientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DonationIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DateofUse" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="RelatedCondition" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="RecipientIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="RecipientCodedName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Donations" Relationship="Self.FK_Donations_Recipients" FromRole="Recipients" ToRole="Donations" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="AdminUser">
-          <Key>
-            <PropertyRef Name="admin_id" />
-            <PropertyRef Name="admin_username" />
-            <PropertyRef Name="admin_password" />
-          </Key>
-          <Property Name="admin_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="admin_username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="admin_password" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="admin_email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Donation">
-          <Key>
-            <PropertyRef Name="DonationID" />
-            <PropertyRef Name="DonationType" />
-            <PropertyRef Name="CrossBloodType" />
-            <PropertyRef Name="CrossRhFactor" />
-            <PropertyRef Name="ExpirationDate" />
-            <PropertyRef Name="NumberofUnits" />
-            <PropertyRef Name="DonationSite" />
-            <PropertyRef Name="DonationIdentifier" />
-          </Key>
-          <Property Name="DonationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DonationType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CrossBloodType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CrossRhFactor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ExpirationDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="NumberofUnits" Type="Double" Nullable="false" />
-          <Property Name="DonationSite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DonationIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Donor" Relationship="Self.FK_Donations_Donors" FromRole="Donations" ToRole="Donors" />
-          <NavigationProperty Name="Recipient" Relationship="Self.FK_Donations_Recipients" FromRole="Donations" ToRole="Recipients" />
+          <NavigationProperty Name="Donation" Relationship="Self.FK_Donations_Donors" FromRole="Donors" ToRole="Donations" />
         </EntityType>
         <EntityType Name="ManageBloodDrive">
           <Key>
             <PropertyRef Name="bloodDrive_id" />
-            <PropertyRef Name="drive_name" />
-            <PropertyRef Name="event_date" />
-            <PropertyRef Name="startTime" />
-            <PropertyRef Name="endTime" />
-            <PropertyRef Name="venue_name" />
-            <PropertyRef Name="address" />
-            <PropertyRef Name="city" />
           </Key>
           <Property Name="bloodDrive_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="drive_name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
@@ -295,21 +195,45 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
           <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="zip" Type="Int32" />
         </EntityType>
+        <EntityType Name="Recipient">
+          <Key>
+            <PropertyRef Name="RecipientID" />
+          </Key>
+          <Property Name="RecipientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DonationIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateofUse" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RelatedCondition" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RecipientIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RecipientCodedName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Donation" Relationship="Self.FK_Donations_Recipients" FromRole="Recipients" ToRole="Donations" />
+        </EntityType>
         <EntityType Name="Staff">
           <Key>
             <PropertyRef Name="staff_id" />
-            <PropertyRef Name="staff_username" />
-            <PropertyRef Name="staff_password" />
           </Key>
           <Property Name="staff_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="staff_username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="staff_password" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="staff_email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="staff_phoneNr" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StaffEmail" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StaffPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StaffPhoneNr" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <Property Name="IsEmailVerified" Type="Boolean" Nullable="false" />
+          <Property Name="ActivationCode" Type="Guid" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <Association Name="FK_Donations_Donors">
           <End Role="Donors" Type="Self.Donor" Multiplicity="1" />
-          <End Role="Donations" Type="Self.Donation" Multiplicity="*" />
+          <End Role="Donations" Type="Self.Donation" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Donors">
               <PropertyRef Name="DonorID" />
@@ -321,7 +245,7 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
         </Association>
         <Association Name="FK_Donations_Recipients">
           <End Role="Recipients" Type="Self.Recipient" Multiplicity="1" />
-          <End Role="Donations" Type="Self.Donation" Multiplicity="*" />
+          <End Role="Donations" Type="Self.Donation" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Recipients">
               <PropertyRef Name="RecipientID" />
@@ -332,13 +256,13 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="BloodDonorDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Donors" EntityType="Self.Donor" />
-          <EntitySet Name="Recipients" EntityType="Self.Recipient" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="AdminUsers" EntityType="Self.AdminUser" />
           <EntitySet Name="Donations" EntityType="Self.Donation" />
+          <EntitySet Name="Donors" EntityType="Self.Donor" />
           <EntitySet Name="ManageBloodDrives" EntityType="Self.ManageBloodDrive" />
+          <EntitySet Name="Recipients" EntityType="Self.Recipient" />
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <AssociationSet Name="FK_Donations_Donors" Association="Self.FK_Donations_Donors">
             <End Role="Donors" EntitySet="Donors" />
             <End Role="Donations" EntitySet="Donations" />
@@ -354,45 +278,6 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="BloodDonorDBModelStoreContainer" CdmEntityContainer="BloodDonorDBEntities">
-          <EntitySetMapping Name="Donors">
-            <EntityTypeMapping TypeName="BloodDonorDBModel.Donor">
-              <MappingFragment StoreEntitySet="Donors">
-                <ScalarProperty Name="DonorID" ColumnName="DonorID" />
-                <ScalarProperty Name="ActiveDonor" ColumnName="ActiveDonor" />
-                <ScalarProperty Name="DonorName" ColumnName="DonorName" />
-                <ScalarProperty Name="BloodType" ColumnName="BloodType" />
-                <ScalarProperty Name="RhFactor" ColumnName="RhFactor" />
-                <ScalarProperty Name="DonorDateofBirth" ColumnName="DonorDateofBirth" />
-                <ScalarProperty Name="DonorPhoneNr" ColumnName="DonorPhoneNr" />
-                <ScalarProperty Name="DonorEmail" ColumnName="DonorEmail" />
-                <ScalarProperty Name="LastScreeningDate" ColumnName="LastScreeningDate" />
-                <ScalarProperty Name="DonorIdentifier" ColumnName="DonorIdentifier" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Recipients">
-            <EntityTypeMapping TypeName="BloodDonorDBModel.Recipient">
-              <MappingFragment StoreEntitySet="Recipients">
-                <ScalarProperty Name="RecipientID" ColumnName="RecipientID" />
-                <ScalarProperty Name="DonationIdentifier" ColumnName="DonationIdentifier" />
-                <ScalarProperty Name="DateofUse" ColumnName="DateofUse" />
-                <ScalarProperty Name="RelatedCondition" ColumnName="RelatedCondition" />
-                <ScalarProperty Name="RecipientIdentifier" ColumnName="RecipientIdentifier" />
-                <ScalarProperty Name="RecipientCodedName" ColumnName="RecipientCodedName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="BloodDonorDBModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AdminUsers">
             <EntityTypeMapping TypeName="BloodDonorDBModel.AdminUser">
               <MappingFragment StoreEntitySet="AdminUsers">
@@ -417,6 +302,22 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Donors">
+            <EntityTypeMapping TypeName="BloodDonorDBModel.Donor">
+              <MappingFragment StoreEntitySet="Donors">
+                <ScalarProperty Name="DonorID" ColumnName="DonorID" />
+                <ScalarProperty Name="ActiveDonor" ColumnName="ActiveDonor" />
+                <ScalarProperty Name="DonorName" ColumnName="DonorName" />
+                <ScalarProperty Name="BloodType" ColumnName="BloodType" />
+                <ScalarProperty Name="RhFactor" ColumnName="RhFactor" />
+                <ScalarProperty Name="DonorDateofBirth" ColumnName="DonorDateofBirth" />
+                <ScalarProperty Name="DonorPhoneNr" ColumnName="DonorPhoneNr" />
+                <ScalarProperty Name="DonorEmail" ColumnName="DonorEmail" />
+                <ScalarProperty Name="LastScreeningDate" ColumnName="LastScreeningDate" />
+                <ScalarProperty Name="DonorIdentifier" ColumnName="DonorIdentifier" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ManageBloodDrives">
             <EntityTypeMapping TypeName="BloodDonorDBModel.ManageBloodDrive">
               <MappingFragment StoreEntitySet="ManageBloodDrives">
@@ -434,14 +335,41 @@ warning 6002: The table/view 'BloodDonorDB.dbo.Staff' does not have a primary ke
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Recipients">
+            <EntityTypeMapping TypeName="BloodDonorDBModel.Recipient">
+              <MappingFragment StoreEntitySet="Recipients">
+                <ScalarProperty Name="RecipientID" ColumnName="RecipientID" />
+                <ScalarProperty Name="DonationIdentifier" ColumnName="DonationIdentifier" />
+                <ScalarProperty Name="DateofUse" ColumnName="DateofUse" />
+                <ScalarProperty Name="RelatedCondition" ColumnName="RelatedCondition" />
+                <ScalarProperty Name="RecipientIdentifier" ColumnName="RecipientIdentifier" />
+                <ScalarProperty Name="RecipientCodedName" ColumnName="RecipientCodedName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Staffs">
             <EntityTypeMapping TypeName="BloodDonorDBModel.Staff">
               <MappingFragment StoreEntitySet="Staff">
                 <ScalarProperty Name="staff_id" ColumnName="staff_id" />
-                <ScalarProperty Name="staff_username" ColumnName="staff_username" />
-                <ScalarProperty Name="staff_password" ColumnName="staff_password" />
-                <ScalarProperty Name="staff_email" ColumnName="staff_email" />
-                <ScalarProperty Name="staff_phoneNr" ColumnName="staff_phoneNr" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="StaffEmail" ColumnName="StaffEmail" />
+                <ScalarProperty Name="StaffPassword" ColumnName="StaffPassword" />
+                <ScalarProperty Name="StaffPhoneNr" ColumnName="StaffPhoneNr" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="IsEmailVerified" ColumnName="IsEmailVerified" />
+                <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="BloodDonorDBModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
